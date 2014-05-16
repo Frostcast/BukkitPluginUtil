@@ -95,7 +95,7 @@ public abstract class MultiCommandHandler extends BukkitCommand implements Comma
 		return true;
 	}
 	
-	public boolean hasPermission(CommandSender sender, SubCommand command) {
+	private boolean hasPermission(CommandSender sender, SubCommand command) {
 		return sender.hasPermission(plugin.getPermissionBase() + "." + command.getPermission());
 	}
 

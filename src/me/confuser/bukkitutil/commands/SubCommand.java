@@ -17,7 +17,7 @@ public abstract class SubCommand {
 
 	public abstract String getHelp();
 
-	public abstract String[] getPermission();
+	public abstract String getPermission();
 	
 	public String getName() {
 		return name;
