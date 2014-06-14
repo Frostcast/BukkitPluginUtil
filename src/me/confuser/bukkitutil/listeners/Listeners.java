@@ -1,4 +1,4 @@
-package me.confuser.bukkitutil.commands;
+package me.confuser.bukkitutil.listeners;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -6,21 +6,17 @@ import java.lang.reflect.ParameterizedType;
 
 import me.confuser.bukkitutil.BukkitPlugin;
 
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 
-public abstract class BukkitCommand<T extends BukkitPlugin> implements CommandExecutor {
+public abstract class Listeners <T extends BukkitPlugin> implements Listener {
 	private Class<T> clazz;
 	protected T plugin;
-
-	private String name;
-
+	
 	@SuppressWarnings("unchecked")
-	public BukkitCommand(String name) {
-		this.name = name;
-
+	public Listeners() {
 		clazz = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
-
+		
 		Method method = null;
 		try {
 			method = clazz.getDeclaredMethod("getPlugin", null);
@@ -29,18 +25,14 @@ public abstract class BukkitCommand<T extends BukkitPlugin> implements CommandEx
 			e1.printStackTrace();
 		}
 		try {
-			plugin = (T) method.invoke(null, method.getParameterTypes());
+			plugin =  (T) method.invoke(null, method.getParameterTypes());
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void register() {
-		((JavaPlugin) plugin).getCommand(name).setExecutor(this);
-	}
-
-	public String getName() {
-		return name;
+		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 }

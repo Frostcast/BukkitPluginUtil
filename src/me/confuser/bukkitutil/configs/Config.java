@@ -3,6 +3,9 @@ package me.confuser.bukkitutil.configs;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 
 import me.confuser.bukkitutil.BukkitPlugin;
 
@@ -25,13 +28,31 @@ import org.bukkit.plugin.Plugin;
  * @author confuser
  *
  */
-public abstract class Config {
+public abstract class Config <T extends BukkitPlugin> {
+	private Class<T> clazz;
+	protected T plugin;
 
 	protected File file = null;
 	public YamlConfiguration conf = new YamlConfiguration();
-	public BukkitPlugin plugin = BukkitPlugin.getBukkitPlugin();
 
+	@SuppressWarnings("unchecked")
 	public Config(Object file) {
+		clazz = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+
+		Method method = null;
+		try {
+			method = clazz.getDeclaredMethod("getPlugin", null);
+		} catch (NoSuchMethodException | SecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			plugin = (T) method.invoke(null, method.getParameterTypes());
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		setFile(file);
 	}
 

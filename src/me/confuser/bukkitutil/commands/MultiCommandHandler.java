@@ -12,10 +12,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public abstract class MultiCommandHandler extends BukkitCommand implements CommandExecutor {
+public abstract class MultiCommandHandler<T extends BukkitPlugin> extends BukkitCommand<T> implements CommandExecutor {
 	private HashMap<String, SubCommand> commands = new HashMap<String, SubCommand>();
-	private BukkitPlugin plugin = BukkitPlugin.getBukkitPlugin();
-	
+
 	// Custom messages, allow whatever is using this to override
 	private String commandMessage = ChatColor.GOLD + "" + ChatColor.BOLD + plugin.getPluginFriendlyName();
 	private String commandTypeHelpMessage = ChatColor.GOLD + "Type /" + getName() + " help for help";
