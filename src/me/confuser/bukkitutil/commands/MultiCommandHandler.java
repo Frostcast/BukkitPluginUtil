@@ -8,12 +8,11 @@ import me.confuser.bukkitutil.BukkitPlugin;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public abstract class MultiCommandHandler<T extends BukkitPlugin> extends BukkitCommand<T> implements CommandExecutor {
-	private HashMap<String, SubCommand> commands = new HashMap<String, SubCommand>();
+public abstract class MultiCommandHandler<T extends BukkitPlugin> extends BukkitCommand<T> {
+	private HashMap<String, SubCommand<T>> commands = new HashMap<String, SubCommand<T>>();
 
 	// Custom messages, allow whatever is using this to override
 	private String commandMessage = ChatColor.GOLD + "" + ChatColor.BOLD + plugin.getPluginFriendlyName();
@@ -29,12 +28,17 @@ public abstract class MultiCommandHandler<T extends BukkitPlugin> extends Bukkit
 	}
 	
 	public abstract void registerCommands();
+	
+	public void commandNotFound(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+		sender.sendMessage(commandNoExistMessage);
+		sender.sendMessage(commandTypeHelpMessage);
+	}
 
-	public void registerSubCommand(SubCommand command) {
+	public void registerSubCommand(SubCommand<T> command) {
 		commands.put(command.getName(), command);
 	}
 
-	public HashMap<String, SubCommand> getCommands() {
+	public HashMap<String, SubCommand<T>> getCommands() {
 		return commands;
 	}
 
@@ -57,18 +61,17 @@ public abstract class MultiCommandHandler<T extends BukkitPlugin> extends Bukkit
 		Vector<String> vec = new Vector<String>();
 		vec.addAll(Arrays.asList(args));
 		vec.remove(0);
-		args = (String[]) vec.toArray(new String[0]);
+		String [] subArgs = vec.toArray(new String[0]);
 		
 		// Clean up
 		vec = null;
 
 		if (!commands.containsKey(sub)) {
-			sender.sendMessage(commandNoExistMessage);
-			sender.sendMessage(commandTypeHelpMessage);
+			commandNotFound(sender, cmd, commandLabel, args);
 			return true;
 		}
 		try {
-			SubCommand command = commands.get(sub);
+			SubCommand<?> command = commands.get(sub);
 
 			if (!hasPermission(sender, command))
 				sender.sendMessage(noPermissionMessage);
@@ -76,9 +79,9 @@ public abstract class MultiCommandHandler<T extends BukkitPlugin> extends Bukkit
 				boolean showHelp = false;
 				
 				if (command instanceof PlayerSubCommand && sender instanceof Player) {
-					showHelp = ((PlayerSubCommand) command).onPlayerCommand((Player) sender, args);
+					showHelp = ((PlayerSubCommand<?>) command).onPlayerCommand((Player) sender, subArgs);
 				} else {
-					showHelp = command.onCommand(sender, args);
+					showHelp = command.onCommand(sender, subArgs);
 				}
 				
 				
@@ -94,7 +97,7 @@ public abstract class MultiCommandHandler<T extends BukkitPlugin> extends Bukkit
 		return true;
 	}
 	
-	private boolean hasPermission(CommandSender sender, SubCommand command) {
+	private boolean hasPermission(CommandSender sender, SubCommand<?> command) {
 		return sender.hasPermission(plugin.getPermissionBase() + "." + command.getPermission());
 	}
 
@@ -102,7 +105,7 @@ public abstract class MultiCommandHandler<T extends BukkitPlugin> extends Bukkit
 		p.sendMessage(ChatColor.GOLD + "/" + getName() + " <command> <args>");
 		p.sendMessage(ChatColor.GOLD + "Commands are as follows:");
 
-		for (SubCommand v : commands.values()) {
+		for (SubCommand<?> v : commands.values()) {
 			if (hasPermission(p, v) && v.getHelp() != null)
 				p.sendMessage(ChatColor.AQUA + v.getName() + " " + v.getHelp());
 		}
