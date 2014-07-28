@@ -7,6 +7,7 @@ import java.lang.reflect.ParameterizedType;
 import me.confuser.bukkitutil.BukkitPlugin;
 
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class BukkitCommand<T extends BukkitPlugin> implements CommandExecutor {
@@ -38,6 +39,10 @@ public abstract class BukkitCommand<T extends BukkitPlugin> implements CommandEx
 
 	public void register() {
 		((JavaPlugin) plugin).getCommand(name).setExecutor(this);
+		
+		if (this instanceof TabCompleter) {
+			((JavaPlugin) plugin).getCommand(name).setTabCompleter((TabCompleter) this);
+		}
 	}
 
 	public String getName() {
