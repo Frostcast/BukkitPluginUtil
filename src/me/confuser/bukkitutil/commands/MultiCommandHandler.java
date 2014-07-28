@@ -17,7 +17,7 @@ public abstract class MultiCommandHandler<T extends BukkitPlugin> extends Bukkit
 	// Custom messages, allow whatever is using this to override
 	private String commandMessage = ChatColor.GOLD + "" + ChatColor.BOLD + plugin.getPluginFriendlyName();
 	private String commandTypeHelpMessage = ChatColor.GOLD + "Type /" + getName() + " help for help";
-	private String commandNoExistMessage = ChatColor.RED + "Command dosen't exist.";
+	private String commandNoExistMessage = ChatColor.RED + "Command doesn't exist.";
 	private String errorOccuredMessage = ChatColor.RED + "An error occured while executing the command. Check the console";
 	private String noPermissionMessage = ChatColor.RED + "You do not have permission for this command";
 
