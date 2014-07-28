@@ -62,7 +62,7 @@ public abstract class Config <T extends BukkitPlugin> {
 	 * @param input
 	 * @return (Config) instance
 	 */
-	public Config setFile(Object input) {
+	public Config<T> setFile(Object input) {
 		// handle the File
 		if (input == null) {
 			new InvalidConfigurationException("File cannot be null!").printStackTrace();
