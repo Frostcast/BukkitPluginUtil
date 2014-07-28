@@ -3,12 +3,14 @@ package me.confuser.bukkitutil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class BukkitPlugin extends JavaPlugin {
-	private static BukkitPlugin statPlugin;
+	protected static BukkitPlugin statPlugin;
 	
 	public BukkitPlugin() {
 		statPlugin = this;
 	}
-
+	
+	public abstract void onEnable();
+	
 	public abstract String getPluginFriendlyName();
 
 	public abstract String getPermissionBase();
