@@ -1,6 +1,7 @@
 package me.confuser.bukkitutil;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import me.confuser.bukkitutil.configs.Config;
 
@@ -32,8 +33,8 @@ public class Message {
 		return replace("[" + token + "]", replace.toString());
 	}
 
-	public boolean sendTo(String playerName) {
-		Player player = Bukkit.getPlayerExact(playerName);
+	public boolean sendTo(UUID uuid) {
+		Player player = Bukkit.getPlayer(uuid);
 
 		if (player == null)
 			return false;
@@ -68,7 +69,7 @@ public class Message {
 		}
 	}
 
-	public static void load(Config config) {
+	public static void load(Config<?> config) {
 		load(config.conf);
 	}
 }
