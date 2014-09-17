@@ -65,7 +65,7 @@ public class Message {
 		messages.clear();
 
 		for (String key : config.getConfigurationSection("messages").getKeys(false)) {
-			messages.put(key, ChatColor.translateAlternateColorCodes('&', config.getString("messages." + key)));
+			messages.put(key, ChatColor.translateAlternateColorCodes('&', config.getString("messages." + key).replace("\\n", "\n")));
 		}
 	}
 
