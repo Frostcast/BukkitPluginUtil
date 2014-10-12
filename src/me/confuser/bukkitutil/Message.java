@@ -7,6 +7,7 @@ import me.confuser.bukkitutil.configs.Config;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -44,8 +45,8 @@ public class Message {
 		return true;
 	}
 
-	public void sendTo(Player player) {
-		player.sendMessage(message);
+	public void sendTo(CommandSender sender) {
+		sender.sendMessage(message);
 	}
 
 	@Override
