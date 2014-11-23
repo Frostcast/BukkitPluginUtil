@@ -33,6 +33,18 @@ public class Message {
 	public Message set(String token, Integer replace) {
 		return replace("[" + token + "]", replace.toString());
 	}
+	
+	public Message set(String token, Double replace) {
+		return replace("[" + token + "]", replace.toString());
+	}
+	
+	public Message set(String token, Long replace) {
+		return replace("[" + token + "]", replace.toString());
+	}
+	
+	public Message set(String token, Float replace) {
+		return replace("[" + token + "]", replace.toString());
+	}
 
 	public boolean sendTo(UUID uuid) {
 		Player player = Bukkit.getPlayer(uuid);
