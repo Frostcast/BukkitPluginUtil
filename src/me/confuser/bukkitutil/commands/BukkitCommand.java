@@ -39,7 +39,7 @@ public abstract class BukkitCommand<T extends BukkitPlugin> implements CommandEx
 
 	public void register() {
 		((JavaPlugin) plugin).getCommand(name).setExecutor(this);
-		
+
 		if (this instanceof TabCompleter) {
 			((JavaPlugin) plugin).getCommand(name).setTabCompleter((TabCompleter) this);
 		}
