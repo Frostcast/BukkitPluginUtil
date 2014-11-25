@@ -1,17 +1,26 @@
 package me.confuser.bukkitutil.commands;
 
-import me.confuser.bukkitutil.BukkitPlugin;
-
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class BukkitSubCommandWrapper <T extends BukkitPlugin> extends BukkitCommand<T> {
-	private SubCommand<T> command;
-	
-	public BukkitSubCommandWrapper(String name, SubCommand<T> command) {
-		super(name);
-		
+public class BukkitSubCommandWrapper implements CommandExecutor {
+	private String name;
+	private SubCommand<?> command;
+
+	public BukkitSubCommandWrapper(String name, SubCommand<?> command) {
+		this.name = name;
 		this.command = command;
+	}
+
+	public void register() {
+		((JavaPlugin) command.plugin).getCommand(name).setExecutor(this);
+
+		if (this instanceof TabCompleter) {
+			((JavaPlugin) command.plugin).getCommand(name).setTabCompleter((TabCompleter) this);
+		}
 	}
 
 	@Override
