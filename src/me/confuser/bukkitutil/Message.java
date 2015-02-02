@@ -77,7 +77,7 @@ public class Message {
 	public static void load(YamlConfiguration config) {
 		messages.clear();
 
-		for (String key : config.getConfigurationSection("messages").getKeys(false)) {
+		for (String key : config.getConfigurationSection("messages").getKeys(true)) {
 			messages.put(key, ChatColor.translateAlternateColorCodes('&', config.getString("messages." + key).replace("\\n", "\n")));
 		}
 	}
