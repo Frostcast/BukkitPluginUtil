@@ -49,7 +49,7 @@ public class Message {
 	public boolean sendTo(UUID uuid) {
 		Player player = Bukkit.getPlayer(uuid);
 
-		if (player == null)
+		if (player == null || message.isEmpty())
 			return false;
 
 		player.sendMessage(message);
@@ -58,7 +58,7 @@ public class Message {
 	}
 
 	public void sendTo(CommandSender sender) {
-		sender.sendMessage(message);
+		if (!message.isEmpty()) sender.sendMessage(message);
 	}
 
 	@Override
