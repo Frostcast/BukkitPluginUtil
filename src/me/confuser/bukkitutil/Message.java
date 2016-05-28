@@ -1,88 +1,94 @@
 package me.confuser.bukkitutil;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import me.confuser.bukkitutil.configs.Config;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class Message {
-	private static HashMap<String, String> messages = new HashMap<String, String>(10);
 
-	private String message;
+  private static HashMap<String, String> messages = new HashMap<String, String>(10);
 
-	public Message(String key) {
-		this.message = messages.get(key);
-	}
+  private String message;
 
-	public Message replace(CharSequence oldChar, CharSequence newChar) {
-		message = this.message.replace(oldChar, newChar);
+  public Message(String key) {
+    this.message = messages.get(key);
 
-		return this;
-	}
+    if (this.message == null) {
+      Bukkit.getLogger().warning("Missing " + key + " message");
+      this.message = "";
+    }
+  }
 
-	public Message set(String token, String replace) {
-		return replace("[" + token + "]", replace);
-	}
+  public static Message get(String key) {
+    return new Message(key);
+  }
 
-	public Message set(String token, Integer replace) {
-		return replace("[" + token + "]", replace.toString());
-	}
-	
-	public Message set(String token, Double replace) {
-		return replace("[" + token + "]", replace.toString());
-	}
-	
-	public Message set(String token, Long replace) {
-		return replace("[" + token + "]", replace.toString());
-	}
-	
-	public Message set(String token, Float replace) {
-		return replace("[" + token + "]", replace.toString());
-	}
+  public static String getString(String key) {
+    return messages.get(key);
+  }
 
-	public boolean sendTo(UUID uuid) {
-		Player player = Bukkit.getPlayer(uuid);
+  public static void load(YamlConfiguration config) {
+    messages.clear();
 
-		if (player == null || message.isEmpty())
-			return false;
+    for (String key : config.getConfigurationSection("messages").getKeys(true)) {
+      messages.put(key, ChatColor
+              .translateAlternateColorCodes('&', config.getString("messages." + key).replace("\\n", "\n")));
+    }
+  }
 
-		player.sendMessage(message);
+  public static void load(Config<?> config) {
+    load(config.conf);
+  }
 
-		return true;
-	}
+  public Message replace(CharSequence oldChar, CharSequence newChar) {
+    message = this.message.replace(oldChar, newChar);
 
-	public void sendTo(CommandSender sender) {
-		if (!message.isEmpty()) sender.sendMessage(message);
-	}
+    return this;
+  }
 
-	@Override
-	public String toString() {
-		return message;
-	}
+  public Message set(String token, String replace) {
+    return replace("[" + token + "]", replace);
+  }
 
-	public static Message get(String key) {
-		return new Message(key);
-	}
+  public Message set(String token, Integer replace) {
+    return replace("[" + token + "]", replace.toString());
+  }
 
-	public static String getString(String key) {
-		return messages.get(key);
-	}
+  public Message set(String token, Double replace) {
+    return replace("[" + token + "]", replace.toString());
+  }
 
-	public static void load(YamlConfiguration config) {
-		messages.clear();
+  public Message set(String token, Long replace) {
+    return replace("[" + token + "]", replace.toString());
+  }
 
-		for (String key : config.getConfigurationSection("messages").getKeys(true)) {
-			messages.put(key, ChatColor.translateAlternateColorCodes('&', config.getString("messages." + key).replace("\\n", "\n")));
-		}
-	}
+  public Message set(String token, Float replace) {
+    return replace("[" + token + "]", replace.toString());
+  }
 
-	public static void load(Config<?> config) {
-		load(config.conf);
-	}
+  public boolean sendTo(UUID uuid) {
+    Player player = Bukkit.getPlayer(uuid);
+
+    if (player == null || message.isEmpty())
+      return false;
+
+    player.sendMessage(message);
+
+    return true;
+  }
+
+  public void sendTo(CommandSender sender) {
+    if (!message.isEmpty()) sender.sendMessage(message);
+  }
+
+  @Override
+  public String toString() {
+    return message;
+  }
 }
