@@ -55,7 +55,7 @@ public abstract class MultiCommandHandler<T extends BukkitPlugin> extends Bukkit
 			return true;
 		}
 
-		String sub = args[0];
+		String sub = args[0].toLowerCase();
 
 		// Remove sub from args
 		Vector<String> vec = new Vector<String>();

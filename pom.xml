@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.confuser</groupId>
 	<artifactId>BukkitPluginUtil</artifactId>
-	<version>1.6.1</version>
+	<version>1.6.2</version>
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<sourceDirectory>src</sourceDirectory>
@@ -29,13 +29,13 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.7.10-R0.1-SNAPSHOT</version>
+			<version>1.8.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency> <!-- NMS blocks -->
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>1.7.10-R0.1-SNAPSHOT</version>
+			<version>1.8.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

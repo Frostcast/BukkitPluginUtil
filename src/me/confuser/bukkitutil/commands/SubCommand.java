@@ -16,7 +16,7 @@ public abstract class SubCommand <T extends BukkitPlugin> {
 	
 	@SuppressWarnings("unchecked")
 	public SubCommand(String name) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		
 		clazz = ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
 
