@@ -5,9 +5,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -138,7 +136,7 @@ public abstract class Config<T extends BukkitPlugin> {
     }
 
     // Look for defaults in the jar
-    InputStream defConfigStream = plugin.getResource(file.getName());
+    Reader defConfigStream = new InputStreamReader(plugin.getResource(file.getName()), "UTF8");
     if (defConfigStream != null) {
       YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
       conf.setDefaults(defConfig);
